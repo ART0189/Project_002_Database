@@ -6,8 +6,8 @@ class PlayerBase(db.Model, EntityBase):
     __tablename__ = 'PlayerBaseData'
 
     # NaturalPerson
-    PlayerID = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
-    PlayerName = db.Column(db.String(10), nullable=False)
+    PlayerBaseID = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    PlayerBaseName = db.Column(db.String(10), nullable=False)
     _Password = db.Column(db.String(20), nullable=False)
     Gender = db.Column(db.Enum('男', '女', '其他', '未知'), nullable=False, default='未知')
 
@@ -20,7 +20,7 @@ class PlayerBase(db.Model, EntityBase):
 
     # StaticInfo
     HeadPortrait = db.Column(db.String(100), nullable=False, default='DefaultPath')
-    Address = db.Column(db.String(50), nullable=False)
+    Address = db.Column(db.String(50), nullable=False,default='Home')
     Telephone = db.Column(db.String(20), nullable=False)
 
     # DynamicInfo
@@ -42,3 +42,4 @@ class PlayerBase(db.Model, EntityBase):
         return self._HaveLogin
 
     # PlayerBind
+    Account_002 = db.relationship('Project002Player', backref='PlayerBaseData')

@@ -1,0 +1,2 @@
+def GetHardwareCode():
+    return 'Construct'

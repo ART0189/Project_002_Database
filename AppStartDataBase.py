@@ -1,6 +1,9 @@
 from flask import Flask
-import DataBaseConfig as DataBaseConfig
+import DataBaseConfig
 from DataBase import db
+from Constructor.ConstructHelper import ConstructTest
+import Interface.Player.PlayerBaseInfoModify as PBIM
+import Interface.Player.Project002PlayerModify as PM_002
 
 #init
 #Init application from DataBaseConfig by flask
@@ -10,10 +13,10 @@ db.init_app(app)
 
 #register
 #register on json by blueprint, use url_prefix to define the type that called by url
-#they are uesd in interfaces which contains functions without the prefix 'Py', and just for test and frontend call
+#they are uesd in interfaces which contains + without the prefix 'Py', and just for test and frontend call
 
-#app.register_blueprint(um.user,url_prefix="/user")
-#app.register_blueprint(rm.restaurant,url_prefix="/restaurant")
+app.register_blueprint(PBIM.baseinfomodify,url_prefix="/baseinfomodify")
+app.register_blueprint(PM_002.playermodify_002,url_prefix="/playermodify002")
 #app.register_blueprint(dm.dish,url_prefix="/dish")
 #app.register_blueprint(om.order,url_prefix='/order')
 
@@ -24,19 +27,10 @@ db.init_app(app)
 #can remove if use database manager or .sql
 @app.route('/')
 def Start():
-    '''
+
     db.drop_all()
     db.create_all()
-    DataBaseConstruct_ALL(1)
-    '''
-
-    #om.PyFind_OrderTime(datetime.date.today())
-    #GenericModify(1,1,'User','Telephone',123456)
-    #GenericModify(2, 15, 'User')
-    #GenericModify(3,1,'User',['Gender','Address'],['\'男\'','\'下北泽\''])
-
-    #Tp_DishList=dm.PyList()
-    #print(Tp_DishList)
+    ConstructTest()
 
     return "hello"
 
