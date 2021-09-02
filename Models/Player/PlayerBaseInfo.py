@@ -42,4 +42,5 @@ class PlayerBase(db.Model, EntityBase):
         return self._HaveLogin
 
     # PlayerBind
-    Account_002 = db.relationship('Project002Player', backref='PlayerBaseData')
+    Account_002 = db.relationship('Player_002', backref='PlayerBaseData')
+    Account_004 = db.relationship('Player_004', backref='PlayerBaseData')
