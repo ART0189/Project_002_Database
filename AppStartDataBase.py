@@ -8,17 +8,17 @@ import  Interface.Player.PlayerModify_004 as PM_004
 
 #init
 #Init application from DataBaseConfig by flask
-app = Flask(__name__)
-app.config.from_object(DataBaseConfig)
-db.init_app(app)
+DataBaseApp = Flask(__name__)
+DataBaseApp.config.from_object(DataBaseConfig)
+db.init_app(DataBaseApp)
 
 #register
 #register on json by blueprint, use url_prefix to define the type that called by url
 #they are uesd in interfaces which contains + without the prefix 'Py', and just for test and frontend call
 
-app.register_blueprint(PBIM.baseinfomodify,url_prefix="/baseinfomodify")
-app.register_blueprint(PM_002.playermodify_002,url_prefix="/playermodify002")
-app.register_blueprint(PM_004.playermodify_004,url_prefix="/playermodify004")
+DataBaseApp.register_blueprint(PBIM.baseinfomodify,url_prefix="/baseinfomodify")
+DataBaseApp.register_blueprint(PM_002.playermodify_002,url_prefix="/playermodify002")
+DataBaseApp.register_blueprint(PM_004.playermodify_004,url_prefix="/playermodify004")
 #app.register_blueprint(dm.dish,url_prefix="/dish")
 #app.register_blueprint(om.order,url_prefix='/order')
 
@@ -27,7 +27,7 @@ app.register_blueprint(PM_004.playermodify_004,url_prefix="/playermodify004")
 #called when open localhost if database use localhost as uri config
 #do database base construct or other database init operations
 #can remove if use database manager or .sql
-@app.route('/')
+@DataBaseApp.route('/')
 def Start():
     '''
     db.drop_all()
@@ -45,4 +45,4 @@ if __name__ == '__main__':
     print('Main DataBase Start!')
     print('Project002 DataBase Start!')
     print('Project004 DataBase Start!')
-    app.run(debug=True)
+    DataBaseApp.run(debug=True)

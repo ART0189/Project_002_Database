@@ -23,3 +23,12 @@ def PyUnsafeAddPlayer_002(playername,hardwarecode):
     db.session.add(player_002)
     db.session.commit()
     return player_002
+
+def PyFind_ID_002(playerid):
+    return Player_002.query.get(playerid)
+
+def PyFind_Name_002(playername):
+    return Player_002.query.filter_by(PlayerName=playername).first()
+
+def PyCheckPlayer_002(playername,hardwarecode):
+    return PyFind_Name_002(playername).HardwareCode==hardwarecode
