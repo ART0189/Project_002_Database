@@ -39,4 +39,7 @@ def Start():
 if __name__ == '__main__':
     #LocalDataBase
 
+    print('Main DataBase Start!')
+    print('Project002 DataBase Start!')
+    print('Project004 DataBase Start!')
     app.run(debug=True)
