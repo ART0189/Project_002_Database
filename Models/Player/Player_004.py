@@ -3,7 +3,7 @@ from ..ModelsEntity import EntityBase
 
 
 class Player_004(db.Model, EntityBase):
-    __tablename__ = 'PlayerData_Project002'
+    __tablename__ = 'PlayerData_Project004'
 
     # BaseInfo
     PlayerID = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
