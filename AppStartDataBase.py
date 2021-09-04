@@ -1,16 +1,19 @@
 from flask import Flask
+from flask_script import Manager,Server
 import DataBaseConfig
 from DataBase import db
 from Constructor.ConstructHelper import ConstructTest
 import Interface.Player.PlayerBaseInfoModify as PBIM
 import Interface.Player.PlayerModify_002 as PM_002
-import  Interface.Player.PlayerModify_004 as PM_004
+import Interface.Player.PlayerModify_004 as PM_004
 
 #init
 #Init application from DataBaseConfig by flask
 DataBaseApp = Flask(__name__)
 DataBaseApp.config.from_object(DataBaseConfig)
 db.init_app(DataBaseApp)
+DataBaseManager=Manager(DataBaseApp)
+DataBaseManager.add_command("runserver", Server(host='0.0.0.0', port=5000, use_debugger=True, use_reloader=True))
 
 #register
 #register on json by blueprint, use url_prefix to define the type that called by url
@@ -34,6 +37,9 @@ def Start():
     db.create_all()
     ConstructTest()
     '''
+
+    from TestRequests.TestDBReqHelper import FindRequest
+    FindRequest('Ayanami','UnInitedHardwareCode')
 
     return "hello"
 
