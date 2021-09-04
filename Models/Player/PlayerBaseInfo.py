@@ -7,7 +7,7 @@ class PlayerBase(db.Model, EntityBase):
 
     # NaturalPerson
     PlayerBaseID = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
-    PlayerBaseName = db.Column(db.String(10), nullable=False)
+    PlayerBaseName = db.Column(db.String(15), nullable=False)
     _Password = db.Column(db.String(20), nullable=False)
     Gender = db.Column(db.Enum('男', '女', '其他', '未知'), nullable=False, default='未知')
 

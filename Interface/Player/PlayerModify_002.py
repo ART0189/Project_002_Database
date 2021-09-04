@@ -4,15 +4,6 @@ from Models.Player.Player_002 import Player_002
 
 playermodify_002 = Blueprint('playermodify002', __name__)
 
-@playermodify_002.route('/add/<playername>/<hardwarecode>')
-def UnsafeAddPlayer_002(playername,hardwarecode):
-    '''
-    You shouldn't use it! Add any player of any project in player base info modify
-    :param playername: player name
-    :return: player_002 json
-    '''
-    return jsonify(PyUnsafeAddPlayer_002(playername,hardwarecode).to_json())
-
 def PyUnsafeAddPlayer_002(playername,hardwarecode):
     '''
     You shouldn't use it! Add any player of any project in player base info modify
@@ -24,12 +15,18 @@ def PyUnsafeAddPlayer_002(playername,hardwarecode):
     db.session.commit()
     return player_002
 
-@playermodify_002.route('/find',methods=['GET','POST'])
-def Find_002_Api():
+@playermodify_002.route('/login',methods=['GET','POST'])
+def Login_002_Api():
     DataBaseResponse={'code':1,'message':'Find Failed','data':{}}
     ClientRequest=request.values
-    PlayerName=ClientRequest['playername'] if 'playername' in ClientRequest else 'None'
-    PlayerHardwareCode=ClientRequest['hardwarecode'] if 'hardwarecode' in ClientRequest else 'None'
+    if 'playername' in ClientRequest:
+        PlayerName=ClientRequest['playername']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'hardwarecode' in ClientRequest:
+        PlayerHardwareCode=ClientRequest['hardwarecode']
+    else:
+        return jsonify(DataBaseResponse)
     PlayerInfo=PyFind_Name_002(PlayerName)
     if PlayerInfo:
         if(PlayerInfo.HardwareCode==PlayerHardwareCode):
@@ -38,6 +35,9 @@ def Find_002_Api():
 
     return jsonify(DataBaseResponse)
 
+@playermodify_002.route('/find/id',methods=['GET','POST'])
+def Find_002_Api():
+    return False
 
 def PyFind_ID_002(playerid):
     return Player_002.query.get(playerid)
