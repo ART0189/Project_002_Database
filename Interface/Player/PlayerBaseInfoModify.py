@@ -89,3 +89,34 @@ def PyAddPlayer_004(baseid,playername,hardwarecode):
     db.session.merge(playerbaseinfo)
     db.session.commit()
     return TpPlayer004
+
+@baseinfomodify.route('/login',methods=['GET','POST'])
+def LoginPlayerBase():
+    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {}}
+    ClientRequest = request.values
+    if 'baseid' in ClientRequest:
+        PlayerBaseID = ClientRequest['baseid']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'basename' in ClientRequest:
+        BaseName = ClientRequest['basename']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'password' in ClientRequest:
+        BasePassword = ClientRequest['password']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'hardwarecode' in ClientRequest:
+        PlayerHardwareCode = ClientRequest['hardwarecode']
+    else:
+        return jsonify(DataBaseResponse)
+
+    TpBaseInfo=PyFind_Name_Base(BaseName)
+    if(TpBaseInfo):
+        if(TpBaseInfo.CheckPassword(BasePassword)):
+            DataBaseResponse = {'code': 200, 'message': 'Login Success', 'data': {'baseid':TpBaseInfo.PlayerBaseID}}
+
+    return jsonify(DataBaseResponse)
+
+def PyFind_Name_Base(playername):
+    return PlayerBase.query.filter_by(PlayerName=playername).first()
