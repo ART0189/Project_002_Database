@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_script import Manager,Server
+#from flask_script import Manager,Server
 import DataBaseConfig
 from DataBase import db
 from Constructor.ConstructHelper import ConstructTest

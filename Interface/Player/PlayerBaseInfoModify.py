@@ -119,4 +119,4 @@ def LoginPlayerBase():
     return jsonify(DataBaseResponse)
 
 def PyFind_Name_Base(playername):
-    return PlayerBase.query.filter_by(PlayerName=playername).first()
+    return PlayerBase.query.filter_by(PlayerBaseName=playername).first()
