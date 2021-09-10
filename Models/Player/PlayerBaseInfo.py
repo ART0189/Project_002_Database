@@ -22,6 +22,8 @@ class PlayerBase(db.Model, EntityBase):
     HeadPortrait = db.Column(db.String(100), nullable=False, default='DefaultPath')
     Address = db.Column(db.String(50), nullable=False,default='Home')
     Telephone = db.Column(db.String(20), nullable=False)
+    BanStatus = db.Column(db.Boolean, nullable=False, default=False)
+    HardwareCode = db.Column(db.String(256), nullable=False)
 
     # DynamicInfo
     _HaveLogin = db.Column(db.Boolean, default=False)
