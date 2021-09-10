@@ -17,14 +17,18 @@ def PyUnsafeAddPlayer_002(playername,hardwarecode):
 
 @playermodify_002.route('/login',methods=['GET','POST'])
 def Login_002_Api():
-    DataBaseResponse={'code':1,'message':'Find Failed','data':{}}
+    DataBaseResponse={'code':1,'message':'Find Failed','data':{"ErrorMessage":"ErrorMessage"}}
     ClientRequest=request.values
-    if 'playername' in ClientRequest:
-        PlayerName=ClientRequest['playername']
+    if 'BaseID' in ClientRequest:
+        BaseID=ClientRequest['BaseID']
     else:
         return jsonify(DataBaseResponse)
-    if 'hardwarecode' in ClientRequest:
-        PlayerHardwareCode=ClientRequest['hardwarecode']
+    if 'PlayerName' in ClientRequest:
+        PlayerName=ClientRequest['PlayerName']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'HardwareCode' in ClientRequest:
+        PlayerHardwareCode=ClientRequest['HardwareCode']
     else:
         return jsonify(DataBaseResponse)
     PlayerInfo=PyFind_Name_002(PlayerName)
@@ -34,10 +38,6 @@ def Login_002_Api():
             DataBaseResponse['message']='Find Success'
 
     return jsonify(DataBaseResponse)
-
-@playermodify_002.route('/find/id',methods=['GET','POST'])
-def Find_002_Api():
-    return False
 
 def PyFind_ID_002(playerid):
     return Player_002.query.get(playerid)

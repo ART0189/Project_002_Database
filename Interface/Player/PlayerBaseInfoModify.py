@@ -10,23 +10,27 @@ baseinfomodify = Blueprint('baseinfomodify', __name__)
 
 @baseinfomodify.route('/register/base',methods=['GET','POST'])
 def AddPlayerBase():
-    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {}}
+    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
     ClientRequest = request.values
-    if 'playername' in ClientRequest:
-        PlayerName = ClientRequest['playername']
+    if 'BaseName' in ClientRequest:
+        PlayerName = ClientRequest['BaseName']
     else:
         return jsonify(DataBaseResponse)
-    if 'password' in ClientRequest:
-        PlayerPassword = ClientRequest['password']
+    if 'Password' in ClientRequest:
+        PlayerPassword = ClientRequest['Password']
     else:
         return jsonify(DataBaseResponse)
-    if 'telephone' in ClientRequest:
-        PlayereTelephone = ClientRequest['telephone']
+    if 'Telephone' in ClientRequest:
+        PlayereTelephone = ClientRequest['Telephone']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'HardwareCode' in ClientRequest:
+        HardwareCode = ClientRequest['HardwareCode']
     else:
         return jsonify(DataBaseResponse)
 
     PlayerBaseInfo=PyAddPlayerBase(PlayerName,PlayerPassword,PlayereTelephone)
-    DataBaseResponse={'code': 200, 'message': 'Register Success', 'data': {'baseid':PlayerBaseInfo.PlayerBaseID}}
+    DataBaseResponse={'code': 200, 'message': 'Register Success', 'data': {'BaseID':PlayerBaseInfo.PlayerBaseID}}
     return jsonify(DataBaseResponse)
 
 
@@ -40,18 +44,18 @@ def PyAddPlayerBase(basename, pwd, tele):
 
 @baseinfomodify.route('/register/002',methods=['GET','POST'])
 def AddPlayer_002():
-    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {}}
+    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
     ClientRequest = request.values
-    if 'playername' in ClientRequest:
-        PlayerName = ClientRequest['playername']
+    if 'PlayerName' in ClientRequest:
+        PlayerName = ClientRequest['PlayerName']
     else:
         return jsonify(DataBaseResponse)
-    if 'baseid' in ClientRequest:
-        PlayerBaseID = ClientRequest['baseid']
+    if 'BaseID' in ClientRequest:
+        PlayerBaseID = ClientRequest['BaseID']
     else:
         return jsonify(DataBaseResponse)
-    if 'hardwarecode' in ClientRequest:
-        PlayerHardwareCode = ClientRequest['hardwarecode']
+    if 'HardwareCode' in ClientRequest:
+        PlayerHardwareCode = ClientRequest['HardwareCode']
     else:
         return jsonify(DataBaseResponse)
 
@@ -92,29 +96,29 @@ def PyAddPlayer_004(baseid,playername,hardwarecode):
 
 @baseinfomodify.route('/login',methods=['GET','POST'])
 def LoginPlayerBase():
-    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {}}
-    ClientRequest = request.values
-    if 'baseid' in ClientRequest:
-        PlayerBaseID = ClientRequest['baseid']
+    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
+    ClientRequest = request.get_json()
+    if 'BaseID' in ClientRequest:
+        PlayerBaseID = ClientRequest['BaseID']
     else:
         return jsonify(DataBaseResponse)
-    if 'basename' in ClientRequest:
-        BaseName = ClientRequest['basename']
+    if 'BaseName' in ClientRequest:
+        BaseName = ClientRequest['BaseName']
     else:
         return jsonify(DataBaseResponse)
-    if 'password' in ClientRequest:
-        BasePassword = ClientRequest['password']
+    if 'Password' in ClientRequest:
+        BasePassword = ClientRequest['Password']
     else:
         return jsonify(DataBaseResponse)
-    if 'hardwarecode' in ClientRequest:
-        PlayerHardwareCode = ClientRequest['hardwarecode']
+    if 'HardwareCode' in ClientRequest:
+        PlayerHardwareCode = ClientRequest['HardwareCode']
     else:
         return jsonify(DataBaseResponse)
 
     TpBaseInfo=PyFind_Name_Base(BaseName)
     if(TpBaseInfo):
         if(TpBaseInfo.CheckPassword(BasePassword)):
-            DataBaseResponse = {'code': 200, 'message': 'Login Success', 'data': {'baseid':TpBaseInfo.PlayerBaseID}}
+            DataBaseResponse = {'code': 200, 'message': 'Login Success', 'data': {'BaseID':TpBaseInfo.PlayerBaseID}}
 
     return jsonify(DataBaseResponse)
 
