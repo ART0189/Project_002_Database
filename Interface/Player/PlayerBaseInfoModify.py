@@ -32,7 +32,7 @@ def AddPlayerBase():
     if(not bool(PyFind_Name_Base(PlayerName).first())):
         if(not FindTelephoneBanned(PlayereTelephone)):
             if(not FindHardwareCodeBanned(HardwareCode)):
-                PlayerBaseInfo=PyAddPlayerBase(PlayerName,PlayerPassword,PlayereTelephone)
+                PlayerBaseInfo=PyAddPlayerBase(PlayerName,PlayerPassword,PlayereTelephone,HardwareCode)
                 DataBaseResponse={'code': 200, 'ErrorMessage': 'Register Success', 'data': {'BaseID':PlayerBaseInfo.PlayerBaseID}}
             else:
                 DataBaseResponse['ErrorMessage']='The computer has been banned!'
@@ -44,8 +44,8 @@ def AddPlayerBase():
     return jsonify(DataBaseResponse)
 
 
-def PyAddPlayerBase(basename, pwd, tele):
-    playerbaseinfo = PlayerBase(PlayerBaseName=basename,Telephone=tele)
+def PyAddPlayerBase(basename, pwd, tele, hardwarecode):
+    playerbaseinfo = PlayerBase(PlayerBaseName=basename,Telephone=tele,HardwareCode=hardwarecode)
     playerbaseinfo.SetPassword(pwd)
     db.session.add(playerbaseinfo)
     db.session.commit()
@@ -64,15 +64,11 @@ def AddPlayer_002():
         PlayerBaseID = ClientRequest['BaseID']
     else:
         return jsonify(DataBaseResponse)
-    if 'HardwareCode' in ClientRequest:
-        PlayerHardwareCode = ClientRequest['HardwareCode']
-    else:
-        return jsonify(DataBaseResponse)
 
     tpbaseinfo=PyGetBaseAccount_ID(PlayerBaseID)
     if(bool(tpbaseinfo)):
         if(not bool(tpbaseinfo.Account_002)):
-            PyAddPlayer_002(PlayerBaseID,PlayerName,PlayerHardwareCode)
+            PyAddPlayer_002(PlayerBaseID,PlayerName)
             DataBaseResponse={'code': 200, 'ErrorMessage': 'Register Success', 'data': {}}
         else:
             DataBaseResponse['ErrorMessage']='Existing Account!'
@@ -82,9 +78,9 @@ def AddPlayer_002():
     return jsonify(DataBaseResponse)
 
 
-def PyAddPlayer_002(baseid, playername,hardwarecode):
+def PyAddPlayer_002(baseid, playername):
     playerbaseinfo = PlayerBase.query.get(baseid)
-    TpPlayer002 = PyUnsafeAddPlayer_002(playername,hardwarecode)
+    TpPlayer002 = PyUnsafeAddPlayer_002(playername)
     playerbaseinfo.Account_002.append(TpPlayer002)
     db.session.merge(playerbaseinfo)
     db.session.commit()
@@ -101,7 +97,7 @@ def AddPlayer_004(baseid,playername,hardwarecode):
     :return: player_004 json
     \'''
     return jsonify(PyAddPlayer_004(baseid,playername,hardwarecode).to_json())
-'''
+
 
 
 def PyAddPlayer_004(baseid,playername,hardwarecode):
@@ -111,6 +107,8 @@ def PyAddPlayer_004(baseid,playername,hardwarecode):
     db.session.merge(playerbaseinfo)
     db.session.commit()
     return TpPlayer004
+'''
+
 
 @baseinfomodify.route('/login',methods=['GET','POST'])
 def LoginPlayerBase():

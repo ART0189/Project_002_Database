@@ -5,13 +5,13 @@ from Interface.Player.PlayerBaseInfoModify import *
 
 playermodify_002 = Blueprint('playermodify002', __name__)
 
-def PyUnsafeAddPlayer_002(playername,hardwarecode):
+def PyUnsafeAddPlayer_002(playername):
     '''
     You shouldn't use it! Add any player of any project in player base info modify
     :param playername: player name
     :return: player_002 obj
     '''
-    player_002 = Player_002(PlayerName=playername, HardwareCode=hardwarecode)
+    player_002 = Player_002(PlayerName=playername)
     db.session.add(player_002)
     db.session.commit()
     return player_002
@@ -53,6 +53,3 @@ def PyGet002_ID(playerid):
 
 def PyFind_Name_002(playername):
     return Player_002.query.filter_by(PlayerName=playername).first()
-
-def PyCheckPlayer_002(playername,hardwarecode):
-    return PyFind_Name_002(playername).HardwareCode==hardwarecode
