@@ -14,7 +14,6 @@ class Player_002(db.Model, EntityBase):
     HaveLogin = db.Column(db.Boolean, nullable=False, default=False)
 
     # Check
-    HardwareCode = db.Column(db.String(256), nullable=False)
 
     # Bind
     SourceBaseAccount = db.Column(db.INTEGER, db.ForeignKey('PlayerBaseData.PlayerBaseID'))

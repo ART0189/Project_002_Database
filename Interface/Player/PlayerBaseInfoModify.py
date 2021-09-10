@@ -3,14 +3,14 @@ from flask import Blueprint, jsonify, request
 from Models.Player.PlayerBaseInfo import PlayerBase
 from Interface.Player.PlayerModify_002 import *
 from Interface.Player.PlayerModify_004 import *
-from Interface.HardwareCodeCal import GetHardwareCode
+from Interface.Ban.BanModify import *
 
 baseinfomodify = Blueprint('baseinfomodify', __name__)
 
 
 @baseinfomodify.route('/register/base',methods=['GET','POST'])
 def AddPlayerBase():
-    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
+    DataBaseResponse = {'code': 1, 'ErrorMessage': 'Register Failed'}
     ClientRequest = request.values
     if 'BaseName' in ClientRequest:
         PlayerName = ClientRequest['BaseName']
@@ -29,8 +29,18 @@ def AddPlayerBase():
     else:
         return jsonify(DataBaseResponse)
 
-    PlayerBaseInfo=PyAddPlayerBase(PlayerName,PlayerPassword,PlayereTelephone)
-    DataBaseResponse={'code': 200, 'message': 'Register Success', 'data': {'BaseID':PlayerBaseInfo.PlayerBaseID}}
+    if(not bool(PyFind_Name_Base(PlayerName).first())):
+        if(not FindTelephoneBanned(PlayereTelephone)):
+            if(not FindHardwareCodeBanned(HardwareCode)):
+                PlayerBaseInfo=PyAddPlayerBase(PlayerName,PlayerPassword,PlayereTelephone)
+                DataBaseResponse={'code': 200, 'ErrorMessage': 'Register Success', 'data': {'BaseID':PlayerBaseInfo.PlayerBaseID}}
+            else:
+                DataBaseResponse['ErrorMessage']='The computer has been banned!'
+        else:
+            DataBaseResponse['ErrorMessage']='The telephone has been banned!'
+    else:
+        DataBaseResponse['ErrorMessage']='Ununique BaseName'
+
     return jsonify(DataBaseResponse)
 
 
@@ -44,7 +54,7 @@ def PyAddPlayerBase(basename, pwd, tele):
 
 @baseinfomodify.route('/register/002',methods=['GET','POST'])
 def AddPlayer_002():
-    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
+    DataBaseResponse = {'code': 1, 'ErrorMessage': 'Register Failed'}
     ClientRequest = request.values
     if 'PlayerName' in ClientRequest:
         PlayerName = ClientRequest['PlayerName']
@@ -59,8 +69,16 @@ def AddPlayer_002():
     else:
         return jsonify(DataBaseResponse)
 
-    PyAddPlayer_002(PlayerBaseID,PlayerName,PlayerHardwareCode)
-    DataBaseResponse={'code': 200, 'message': 'Register Success', 'data': {}}
+    tpbaseinfo=PyGetBaseAccount_ID(PlayerBaseID)
+    if(bool(tpbaseinfo)):
+        if(not bool(tpbaseinfo.Account_002)):
+            PyAddPlayer_002(PlayerBaseID,PlayerName,PlayerHardwareCode)
+            DataBaseResponse={'code': 200, 'ErrorMessage': 'Register Success', 'data': {}}
+        else:
+            DataBaseResponse['ErrorMessage']='Existing Account!'
+    else:
+        DataBaseResponse['ErrorMessage']='Invalid BaseAccount!'
+
     return jsonify(DataBaseResponse)
 
 
@@ -96,7 +114,7 @@ def PyAddPlayer_004(baseid,playername,hardwarecode):
 
 @baseinfomodify.route('/login',methods=['GET','POST'])
 def LoginPlayerBase():
-    DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
+    DataBaseResponse = {'code': 1, 'ErrorMessage': 'Register Failed'}
     ClientRequest = request.get_json()
     if 'BaseID' in ClientRequest:
         PlayerBaseID = ClientRequest['BaseID']
@@ -118,9 +136,26 @@ def LoginPlayerBase():
     TpBaseInfo=PyFind_Name_Base(BaseName)
     if(TpBaseInfo):
         if(TpBaseInfo.CheckPassword(BasePassword)):
-            DataBaseResponse = {'code': 200, 'message': 'Login Success', 'data': {'BaseID':TpBaseInfo.PlayerBaseID}}
+            if(not TpBaseInfo.BanStatus):
+                if(TpBaseInfo.HardwareCode==PlayerHardwareCode):
+                    DataBaseResponse = {'code': 200, 'ErrorMessage': 'Login Success', 'data': {'BaseID':TpBaseInfo.PlayerBaseID}}
+                else:
+                    DataBaseResponse['ErrorMessage']='New Computer! Do additional verification please!'
+            else:
+                DataBaseResponse['ErrorMessage']='The Account has been banned!'
+        else:
+            DataBaseResponse['ErrorMessage']='Invalid Password!'
+    else:
+        DataBaseResponse['ErrorMessage']='Invalid BaseName!'
 
     return jsonify(DataBaseResponse)
 
+def PyGetBaseAccount_ID(id):
+    return PlayerBase.query.get(id)
+
 def PyFind_Name_Base(playername):
     return PlayerBase.query.filter_by(PlayerBaseName=playername).first()
+
+@baseinfomodify.route('/verification',methods=['GET','POST'])
+def TelephoneVerification():
+    return
