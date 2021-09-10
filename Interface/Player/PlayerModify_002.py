@@ -18,7 +18,7 @@ def PyUnsafeAddPlayer_002(playername,hardwarecode):
 @playermodify_002.route('/login',methods=['GET','POST'])
 def Login_002_Api():
     DataBaseResponse={'code':1,'message':'Find Failed','data':{"ErrorMessage":"ErrorMessage"}}
-    ClientRequest=request.values
+    ClientRequest=request.get_json()
     if 'BaseID' in ClientRequest:
         BaseID=ClientRequest['BaseID']
     else:

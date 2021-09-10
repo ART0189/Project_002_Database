@@ -11,7 +11,7 @@ baseinfomodify = Blueprint('baseinfomodify', __name__)
 @baseinfomodify.route('/register/base',methods=['GET','POST'])
 def AddPlayerBase():
     DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
-    ClientRequest = request.values
+    ClientRequest = request.get_json()
     if 'BaseName' in ClientRequest:
         PlayerName = ClientRequest['BaseName']
     else:
@@ -45,7 +45,7 @@ def PyAddPlayerBase(basename, pwd, tele):
 @baseinfomodify.route('/register/002',methods=['GET','POST'])
 def AddPlayer_002():
     DataBaseResponse = {'code': 1, 'message': 'Register Failed', 'data': {"ErrorMessage":"ErrorMessage"}}
-    ClientRequest = request.values
+    ClientRequest = request.get_json()
     if 'PlayerName' in ClientRequest:
         PlayerName = ClientRequest['PlayerName']
     else:
