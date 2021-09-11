@@ -114,10 +114,7 @@ def PyAddPlayer_004(baseid,playername,hardwarecode):
 def LoginPlayerBase():
     DataBaseResponse = {'code': 1, 'ErrorMessage': 'Register Failed'}
     ClientRequest = request.get_json()
-    if 'BaseID' in ClientRequest:
-        PlayerBaseID = ClientRequest['BaseID']
-    else:
-        return jsonify(DataBaseResponse)
+
     if 'BaseName' in ClientRequest:
         BaseName = ClientRequest['BaseName']
     else:
