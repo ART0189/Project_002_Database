@@ -35,10 +35,11 @@ DataBaseApp.register_blueprint(PM_004.playermodify_004,url_prefix="/playermodify
 #can remove if use database manager or .sql
 @DataBaseApp.route('/')
 def Start():
-    
-    #db.drop_all()
-    #db.create_all()
-    #ConstructTest()
+    '''
+    db.drop_all()
+    db.create_all()
+    ConstructTest()
+    '''
 
     #RegisterBaseRequest('RegTest','XXXX',183023)
     #Register002Request('RegTest002',3,'NoHardware')
