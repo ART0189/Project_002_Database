@@ -2,7 +2,7 @@ from flask import Flask
 #from flask_script import Manager,Server
 import DataBaseConfig
 from DataBase import db
-from Constructor.ConstructHelper import ConstructTest
+from Constructor.ConstructHelper import ConstructAll
 import Interface.Player.PlayerBaseInfoModify as PBIM
 import Interface.Player.PlayerModify_002 as PM_002
 import Interface.Player.PlayerModify_004 as PM_004
@@ -37,7 +37,7 @@ def Start():
     '''
     db.drop_all()
     db.create_all()
-    ConstructTest()
+    ConstructAll(1384635792)
     '''
     #RegisterBaseRequest('RegTest','XXXX',183023)
     #Register002Request('RegTest002',3,'NoHardware')

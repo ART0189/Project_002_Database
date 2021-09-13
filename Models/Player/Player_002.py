@@ -7,7 +7,7 @@ class Player_002(db.Model, EntityBase):
 
     # BaseInfo
     PlayerID = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
-    PlayerName = db.Column(db.String(10), nullable=False)
+    PlayerName = db.Column(db.String(15), nullable=False)
     HeadPortrait = db.Column(db.INTEGER, nullable=False, default=1)
     PlayerLv = db.Column(db.INTEGER, nullable=False, default=0)
     PlayerExp = db.Column(db.INTEGER, nullable=False, default=0)

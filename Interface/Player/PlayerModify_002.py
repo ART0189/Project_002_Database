@@ -37,7 +37,7 @@ def Login_002_Api():
                 if(tpbaseinfo.HardwareCode==PlayerHardwareCode):
                     DataBaseResponse['code']=200
                     DataBaseResponse['ErrorMessage']='Find Success'
-                    DataBaseResponse['data']=PyConstructAccount002Helper(PlayerInfo)
+                    DataBaseResponse['data']=PyMakeAccount002Struct(PlayerInfo)
                 else:
                     DataBaseResponse['ErrorMessage']='New Computer! Do additional verification please!'
             else:
@@ -76,7 +76,7 @@ def AddFriend002():
     return jsonify(DataBaseResponse)
 
 @playermodify_002.route('/friend/delete',methods=['GET','POST'])
-def AddFriend002():
+def DeleteFriend002():
     DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
     ClientRequest=request.get_json()
     if 'PlayerID' in ClientRequest:
@@ -93,7 +93,8 @@ def AddFriend002():
         if(PyGet002_ID(FriendID)):
             PyDeleteFriend002(PlayerID,FriendID)
             DataBaseResponse['ErrorMessage']='Delete Success'
-            DataBaseResponse['data']={'RefreshFriends':PyPlayerIDToName(tpplayerinfo.FriendsList)}
+            TpFriendsInfoList=PyGetFriendStructFourParams(tpplayerinfo.FriendsList)
+            DataBaseResponse['data']={'FriendsID':TpFriendsInfoList[0],'FriendsName':TpFriendsInfoList[1],'FriendsHeadPortrait':TpFriendsInfoList[2],'FriendsLv':TpFriendsInfoList[3]}
         else:
             DataBaseResponse['ErrorMessage']='Invalid Friend ID!'
     else:
@@ -113,7 +114,7 @@ def PyGet002_ID(playerid):
 def PyFind_Name_002(playername):
     return Player_002.query.filter_by(PlayerName=playername).first()
 
-def PyConstructAccount002Helper(Account002):
+def PyMakeAccount002Struct(Account002):
     TpRetStruct={}
     TpRetStruct['PlayerID']=Account002.PlayerID
     TpRetStruct['PlayerName']=Account002.PlayerName
@@ -127,12 +128,37 @@ def PyConstructAccount002Helper(Account002):
 
     return TpRetStruct
 
-def PyPlayerIDToName(FriendsListStr):
+def PyMakeFriendStruct(Account002):
+    TpRetStruct={}
+    TpRetStruct['PlayerID']=Account002.PlayerID
+    TpRetStruct['PlayerName']=Account002.PlayerName
+    TpRetStruct['HeadPortrait']=Account002.HeadPortrait
+    TpRetStruct['PlayerLv']=Account002.PlayerLv
+    TpRetStruct['PlayerRank']=Account002.PlayerRank
+
+    return TpRetStruct
+
+def PyGetFriendStructFourParams(FriendsIDList):
+    TpFriendIDListStr=''
+    TpFriendNameListStr=''
+    TpFriendHeadPortraitListStr=''
+    TpFriendLvListStr=''
+
     FriendsIDList=FriendsListStr.split(',')
-    FriendsNameListStr=''
     
     for i in FriendsIDList:
-        FriendsNameListStr+=(PyGet002_ID(int(i)).PlayerName)
-        FriendsNameListStr+=','
+        TpFriendInfoStruct=PyMakeFriendStruct(PyGet002_ID(i))
 
-    return FriendsNameListStr
+        TpFriendIDListStr+=str(TpFriendInfoStruct['PlayerID'])
+        TpFriendIDListStr+=','
+
+        TpFriendNameListStr+=str(TpFriendInfoStruct['PlayerName'])
+        TpFriendNameListStr+=','
+
+        TpFriendHeadPortraitListStr+=str(TpFriendInfoStruct['HeadPortrait'])
+        TpFriendHeadPortraitListStr+=','
+
+        TpFriendLvListStr+=str(TpFriendInfoStruct['PlayerLv'])
+        TpFriendLvListStr+=','
+
+    return TpFriendIDListStr,TpFriendNameListStr,TpFriendHeadPortraitListStr,TpFriendLvListStr
