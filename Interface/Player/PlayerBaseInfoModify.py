@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request
 from Models.Player.PlayerBaseInfo import PlayerBase
 from Interface.Player.PlayerModify_002 import *
 from Interface.Player.PlayerModify_004 import *
+from Interface.Player.PlayerBaseSimpleModify import *
 from Interface.Ban.BanModify import *
 
 baseinfomodify = Blueprint('baseinfomodify', __name__)
@@ -29,7 +30,7 @@ def AddPlayerBase():
     else:
         return jsonify(DataBaseResponse)
 
-    if(not bool(PyFind_Name_Base(PlayerName).first())):
+    if(not bool(PyFind_Name_Base(PlayerName))):
         if(not FindTelephoneBanned(PlayereTelephone)):
             if(not FindHardwareCodeBanned(HardwareCode)):
                 PlayerBaseInfo=PyAddPlayerBase(PlayerName,PlayerPassword,PlayereTelephone,HardwareCode)
@@ -145,11 +146,6 @@ def LoginPlayerBase():
 
     return jsonify(DataBaseResponse)
 
-def PyGetBaseAccount_ID(id):
-    return PlayerBase.query.get(id)
-
-def PyFind_Name_Base(playername):
-    return PlayerBase.query.filter_by(PlayerBaseName=playername).first()
 
 @baseinfomodify.route('/verification',methods=['GET','POST'])
 def TelephoneVerification():

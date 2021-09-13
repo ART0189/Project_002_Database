@@ -1,7 +1,7 @@
 from DataBase import db
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, json, jsonify, request
 from Models.Player.Player_002 import Player_002
-import Interface.Player.PlayerBaseInfoModify as BM
+from Interface.Player.PlayerBaseSimpleModify import *
 
 playermodify_002 = Blueprint('playermodify002', __name__)
 
@@ -29,7 +29,7 @@ def Login_002_Api():
     else:
         return jsonify(DataBaseResponse)
 
-    tpbaseinfo=BM.PyGetBaseAccount_ID(BaseID)
+    tpbaseinfo=PyGetBaseAccount_ID(BaseID)
     if(tpbaseinfo):
         PlayerInfo=tpbaseinfo.Account_002[0]
         if(PlayerInfo):
@@ -48,6 +48,64 @@ def Login_002_Api():
         DataBaseResponse['ErrorMessage']='Invalid BaseAccount!'
 
     return jsonify(DataBaseResponse)
+
+@playermodify_002.route('/friend/add',methods=['GET','POST'])
+def AddFriend002():
+    DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
+    ClientRequest=request.get_json()
+    if 'PlayerID' in ClientRequest:
+        PlayerID=ClientRequest['PlayerID']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'FriendID' in ClientRequest:
+        FriendID=ClientRequest['FriendID']
+    else:
+        return jsonify(DataBaseResponse)
+
+    tpplayerinfo=PyGet002_ID(PlayerID)
+    if(tpplayerinfo):
+        if(PyGet002_ID(FriendID)):
+            PyAddFriend002(PlayerID,FriendID)
+            DataBaseResponse['ErrorMessage']='Add Success'
+            DataBaseResponse['data']={'RefreshFriends':PyPlayerIDToName(tpplayerinfo.FriendsList)}
+        else:
+            DataBaseResponse['ErrorMessage']='Invalid Friend ID!'
+    else:
+        DataBaseResponse['ErrorMessage']='Invalid Player ID!'
+
+    return jsonify(DataBaseResponse)
+
+@playermodify_002.route('/friend/delete',methods=['GET','POST'])
+def AddFriend002():
+    DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
+    ClientRequest=request.get_json()
+    if 'PlayerID' in ClientRequest:
+        PlayerID=ClientRequest['PlayerID']
+    else:
+        return jsonify(DataBaseResponse)
+    if 'FriendID' in ClientRequest:
+        FriendID=ClientRequest['FriendID']
+    else:
+        return jsonify(DataBaseResponse)
+
+    tpplayerinfo=PyGet002_ID(PlayerID)
+    if(tpplayerinfo):
+        if(PyGet002_ID(FriendID)):
+            PyDeleteFriend002(PlayerID,FriendID)
+            DataBaseResponse['ErrorMessage']='Delete Success'
+            DataBaseResponse['data']={'RefreshFriends':PyPlayerIDToName(tpplayerinfo.FriendsList)}
+        else:
+            DataBaseResponse['ErrorMessage']='Invalid Friend ID!'
+    else:
+        DataBaseResponse['ErrorMessage']='Invalid Player ID!'
+
+    return jsonify(DataBaseResponse)
+
+def PyAddFriend002(playerid,friendid):
+    return PyGet002_ID(playerid).AddFriend(friendid)
+
+def PyDeleteFriend002(playerid,friendid):
+    PyGet002_ID(playerid).DeleteFriend(friendid)
 
 def PyGet002_ID(playerid):
     return Player_002.query.get(playerid)
@@ -68,3 +126,13 @@ def PyConstructAccount002Helper(Account002):
     TpRetStruct['PlayerDefaultOOBName']=Account002.PlayerDefaultOOBName
 
     return TpRetStruct
+
+def PyPlayerIDToName(FriendsListStr):
+    FriendsIDList=FriendsListStr.split(',')
+    FriendsNameListStr=''
+    
+    for i in FriendsIDList:
+        FriendsNameListStr+=(PyGet002_ID(int(i)).PlayerName)
+        FriendsNameListStr+=','
+
+    return FriendsNameListStr

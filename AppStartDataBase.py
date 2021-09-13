@@ -6,7 +6,6 @@ from Constructor.ConstructHelper import ConstructTest
 import Interface.Player.PlayerBaseInfoModify as PBIM
 import Interface.Player.PlayerModify_002 as PM_002
 import Interface.Player.PlayerModify_004 as PM_004
-import Interface.Ban.BanModify as BM
 
 from TestRequests.TestDBReqHelper import *
 
@@ -40,7 +39,6 @@ def Start():
     db.create_all()
     ConstructTest()
     '''
-
     #RegisterBaseRequest('RegTest','XXXX',183023)
     #Register002Request('RegTest002',3,'NoHardware')
     #Login002Request('Ayanami','UnInitedHardwareCode')
