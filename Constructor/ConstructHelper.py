@@ -28,8 +28,8 @@ def Construct_AccountData002(AccountNum,MaxHeadPortraitIndex=5,MaxLv=40,TokenLim
         tpinfo002.PlayerExp=random.randint(0, tpinfo002.PlayerLv*25+100)
         tpinfo002.PlayerToken=random.randint(TokenLimit[0], TokenLimit[1])
         tpinfo002.PlayerToken_1=random.randint(Token1Limit[0], Token1Limit[1])
-        for i in range(random.randint(0, AccountNum-1)):
-            tpinfo002.AddFriend(random.randint(0, AccountNum-1))
+        for i in range(random.randint(1, AccountNum)):
+            tpinfo002.AddFriend(random.randint(1, AccountNum))
 
         db.session.merge(tpinfo002)
     db.session.commit()

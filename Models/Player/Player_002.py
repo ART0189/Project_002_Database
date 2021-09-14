@@ -26,6 +26,9 @@ class Player_002(db.Model, EntityBase):
         '''
         Ret if add succeeded
         '''
+        if(NewID==self.PlayerID):
+            return False
+
         if(not self.FindFriendHelper(NewID)):
             try:
                 self.FriendsList+=str(NewID)
@@ -40,6 +43,9 @@ class Player_002(db.Model, EntityBase):
         '''
         Void no Ret
         '''
+        if(DeleteID==self.PlayerID):
+            return
+
         IDList=self.FriendsList.split(',')
         IDList.remove(DeleteID)
 

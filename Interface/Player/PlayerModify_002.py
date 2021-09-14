@@ -49,6 +49,26 @@ def Login_002_Api():
 
     return jsonify(DataBaseResponse)
 
+@playermodify_002.route('/friend/request',methods=['GET','POST'])
+def RequestFriend002():
+    DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
+    ClientRequest=request.get_json()
+    if 'PlayerID' in ClientRequest:
+        PlayerID=ClientRequest['PlayerID']
+    else:
+        return jsonify(DataBaseResponse)
+
+    tpplayerinfo=PyGet002_ID(PlayerID)
+    if(tpplayerinfo):
+        DataBaseResponse['code']=200
+        DataBaseResponse['ErrorMessage']='Request Success'
+        TpFriendsInfoList=PyGetFriendStructFourParams(tpplayerinfo.FriendsList)
+        DataBaseResponse['data']={'FriendsID':TpFriendsInfoList[0],'FriendsName':TpFriendsInfoList[1],'FriendsHeadPortrait':TpFriendsInfoList[2],'FriendsLv':TpFriendsInfoList[3]}
+    else:
+        DataBaseResponse['ErrorMessage']='Invalid Player ID!'
+
+    return jsonify(DataBaseResponse)
+
 @playermodify_002.route('/friend/add',methods=['GET','POST'])
 def AddFriend002():
     DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
@@ -65,9 +85,11 @@ def AddFriend002():
     tpplayerinfo=PyGet002_ID(PlayerID)
     if(tpplayerinfo):
         if(PyGet002_ID(FriendID)):
+            DataBaseResponse['code']=200
             PyAddFriend002(PlayerID,FriendID)
             DataBaseResponse['ErrorMessage']='Add Success'
-            DataBaseResponse['data']={'RefreshFriends':PyPlayerIDToName(tpplayerinfo.FriendsList)}
+            TpFriendsInfoList=PyGetFriendStructFourParams(tpplayerinfo.FriendsList)
+            DataBaseResponse['data']={'FriendsID':TpFriendsInfoList[0],'FriendsName':TpFriendsInfoList[1],'FriendsHeadPortrait':TpFriendsInfoList[2],'FriendsLv':TpFriendsInfoList[3]}
         else:
             DataBaseResponse['ErrorMessage']='Invalid Friend ID!'
     else:
@@ -92,6 +114,7 @@ def DeleteFriend002():
     if(tpplayerinfo):
         if(PyGet002_ID(FriendID)):
             PyDeleteFriend002(PlayerID,FriendID)
+            DataBaseResponse['code']=200
             DataBaseResponse['ErrorMessage']='Delete Success'
             TpFriendsInfoList=PyGetFriendStructFourParams(tpplayerinfo.FriendsList)
             DataBaseResponse['data']={'FriendsID':TpFriendsInfoList[0],'FriendsName':TpFriendsInfoList[1],'FriendsHeadPortrait':TpFriendsInfoList[2],'FriendsLv':TpFriendsInfoList[3]}
@@ -144,10 +167,13 @@ def PyGetFriendStructFourParams(FriendsIDList):
     TpFriendHeadPortraitListStr=''
     TpFriendLvListStr=''
 
-    FriendsIDList=FriendsListStr.split(',')
+    FriendsIDList=FriendsIDList.split(',')
+    FriendsIDList.pop()
     
     for i in FriendsIDList:
         TpFriendInfoStruct=PyMakeFriendStruct(PyGet002_ID(i))
+        if(not bool(TpFriendInfoStruct)):
+            continue
 
         TpFriendIDListStr+=str(TpFriendInfoStruct['PlayerID'])
         TpFriendIDListStr+=','
