@@ -125,6 +125,25 @@ def DeleteFriend002():
 
     return jsonify(DataBaseResponse)
 
+@playermodify_002.route('/playerinfo',methods=['GET','POST'])
+def GetPlayerSimpleInfo():
+    DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
+    ClientRequest=request.get_json()
+    if 'PlayerID' in ClientRequest:
+        PlayerID=ClientRequest['PlayerID']
+    else:
+        return jsonify(DataBaseResponse)
+
+    tpplayerinfo=PyGet002_ID(PlayerID)
+    if(tpplayerinfo):
+        DataBaseResponse['code']=200
+        DataBaseResponse['ErrorMessage']='Get Success'
+        DataBaseResponse['data']={'PlayerInfoStr':PyMakeSimplePlayerinfo002(tpplayerinfo)}
+    else:
+        DataBaseResponse['ErrorMessage']='Invalid Player ID!'
+
+    return jsonify(DataBaseResponse)
+
 def PyAddFriend002(playerid,friendid):
     return PyGet002_ID(playerid).AddFriend(friendid)
 
@@ -188,3 +207,23 @@ def PyGetFriendStructFourParams(FriendsIDList):
         TpFriendLvListStr+=','
 
     return TpFriendIDListStr,TpFriendNameListStr,TpFriendHeadPortraitListStr,TpFriendLvListStr
+
+def PyMakeSimplePlayerinfo002(Account002):
+    TpRetStr=''
+
+    TpRetStr+=str(Account002.PlayerID)
+    TpRetStr+=','
+
+    TpRetStr+=str(Account002.PlayerName)
+    TpRetStr+=','
+
+    TpRetStr+=str(Account002.HeadPortrait)
+    TpRetStr+=','
+
+    TpRetStr+=str(Account002.PlayerLv)
+    TpRetStr+=','
+
+    TpRetStr+=str(Account002.PlayerRank)
+    TpRetStr+=','
+
+    return TpRetStr
