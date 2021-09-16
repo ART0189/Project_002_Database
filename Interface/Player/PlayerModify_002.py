@@ -53,8 +53,8 @@ def Login_002_Api():
 def RequestFriend002():
     DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
     ClientRequest=request.get_json()
-    if 'PlayerID' in ClientRequest:
-        PlayerID=ClientRequest['PlayerID']
+    if 'PlayersID' in ClientRequest:
+        PlayerID=ClientRequest['PlayersID']
     else:
         return jsonify(DataBaseResponse)
 
@@ -125,6 +125,7 @@ def DeleteFriend002():
 
     return jsonify(DataBaseResponse)
 
+<<<<<<< Updated upstream
 @playermodify_002.route('/playerinfo',methods=['GET','POST'])
 def GetPlayerSimpleInfo():
     DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
@@ -141,6 +142,21 @@ def GetPlayerSimpleInfo():
         DataBaseResponse['data']={'PlayerInfoStr':PyMakeSimplePlayerinfo002(tpplayerinfo)}
     else:
         DataBaseResponse['ErrorMessage']='Invalid Player ID!'
+=======
+@playermodify_002.route('/request/players',methods=['GET','POST'])
+def RequestPlayer002():
+    DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
+    ClientRequest=request.get_json()
+    if 'PlayersID' in ClientRequest:
+        PlayersID=ClientRequest['PlayersID']
+    else:
+        return jsonify(DataBaseResponse)
+
+    DataBaseResponse['code']=200
+    DataBaseResponse['ErrorMessage']='Request Success'
+    TpPlayersInfoList=PyGetFriendStructFourParams(PlayersID)
+    DataBaseResponse['data']={'PlayersID':TpPlayersInfoList[0],'PlayersName':TpPlayersInfoList[1],'PlayersHeadPortrait':TpPlayersInfoList[2],'PlayersLv':TpPlayersInfoList[3]}
+>>>>>>> Stashed changes
 
     return jsonify(DataBaseResponse)
 
@@ -180,16 +196,16 @@ def PyMakeFriendStruct(Account002):
 
     return TpRetStruct
 
-def PyGetFriendStructFourParams(FriendsIDList):
+def PyGetFriendStructFourParams(PlayersIDList):
     TpFriendIDListStr=''
     TpFriendNameListStr=''
     TpFriendHeadPortraitListStr=''
     TpFriendLvListStr=''
 
-    FriendsIDList=FriendsIDList.split(',')
-    FriendsIDList.pop()
+    PlayersIDList=PlayersIDList.split(',')
+    PlayersIDList.pop()
     
-    for i in FriendsIDList:
+    for i in PlayersIDList:
         TpFriendInfoStruct=PyMakeFriendStruct(PyGet002_ID(i))
         if(not bool(TpFriendInfoStruct)):
             continue
