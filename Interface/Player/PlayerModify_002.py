@@ -125,7 +125,6 @@ def DeleteFriend002():
 
     return jsonify(DataBaseResponse)
 
-<<<<<<< Updated upstream
 @playermodify_002.route('/playerinfo',methods=['GET','POST'])
 def GetPlayerSimpleInfo():
     DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
@@ -142,7 +141,9 @@ def GetPlayerSimpleInfo():
         DataBaseResponse['data']={'PlayerInfoStr':PyMakeSimplePlayerinfo002(tpplayerinfo)}
     else:
         DataBaseResponse['ErrorMessage']='Invalid Player ID!'
-=======
+
+    return jsonify(DataBaseResponse)
+
 @playermodify_002.route('/request/players',methods=['GET','POST'])
 def RequestPlayer002():
     DataBaseResponse={'code':1,'ErrorMessage':'Find Failed','data':{}}
@@ -156,7 +157,6 @@ def RequestPlayer002():
     DataBaseResponse['ErrorMessage']='Request Success'
     TpPlayersInfoList=PyGetFriendStructFourParams(PlayersID)
     DataBaseResponse['data']={'PlayersID':TpPlayersInfoList[0],'PlayersName':TpPlayersInfoList[1],'PlayersHeadPortrait':TpPlayersInfoList[2],'PlayersLv':TpPlayersInfoList[3]}
->>>>>>> Stashed changes
 
     return jsonify(DataBaseResponse)
 
