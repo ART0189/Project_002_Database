@@ -180,8 +180,7 @@ def PyMakeAccount002Struct(Account002):
     TpRetStruct['PlayerLv']=Account002.PlayerLv
     TpRetStruct['PlayerExp']=Account002.PlayerExp
     TpRetStruct['PlayerRank']=Account002.PlayerRank
-    TpRetStruct['PlayerToken']=Account002.PlayerToken
-    TpRetStruct['PlayerToken_1']=Account002.PlayerToken_1
+    TpRetStruct['PlayerToken']=[Account002.PlayerToken,Account002.PlayerToken1]
     TpRetStruct['PlayerDefaultOOBName']=Account002.PlayerDefaultOOBName
 
     return TpRetStruct
